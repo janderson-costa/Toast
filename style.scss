@@ -1,0 +1,170 @@
+.toasts {
+	position: fixed;
+	display: inline-flex;
+	flex-direction: column;
+	font-family: inherit;
+	margin: 0.65em;
+	gap: 0.65em;
+	z-index: 1000000;
+	transition: 0s;
+
+	&.top {
+		top: 0;
+	}
+
+	&.left {
+		left: 0;
+	}
+
+	&.center {
+		left: 50%;
+		transform: translateX(-50%);
+		min-width: 300px;
+		max-width: 400px;
+	}
+
+	&.right {
+		right: 0;
+	}
+
+	&.bottom {
+		bottom: 0;
+	}
+
+	.toast {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		background-color: #333;
+		border-radius: 6px;
+		box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.3);
+		transition: 0.1s;
+
+		.toast-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			color: #fff;
+			opacity: .6;
+			height: 3.4em;
+			padding: 0 1.2em;
+
+			&:empty {
+				display: none;
+			}
+		}
+
+		.toast-body {
+			display: flex;
+			align-items: center;
+			box-sizing: border-box;
+			width: 100%;
+			padding-top: 1em;
+			padding-bottom: 1em;
+
+			.toast-content {
+				color: #fff;
+				line-height: 1.4em;
+			}
+		}
+
+		.toast-button {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			height: 3.4em;
+			padding: 0 0.8em;
+
+			button {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				box-sizing: border-box;
+				font-size: 1.1em;
+				color: #fff;
+				background-color: transparent;
+				width: 1.6em;
+				height: 1.6em;
+				border: none;
+				border-radius: 4px;
+				padding: 0;
+				padding-bottom: 1.5px;
+				opacity: 0.6;
+				cursor: pointer;
+			}
+
+			button:hover {
+				background-color: rgba(255, 255, 255, 0.1);
+				opacity: 0.95;
+			}
+
+			button:active {
+				background-color: rgba(255, 255, 255, 0.15);
+			}
+		}
+
+		&.show.top {
+			animation: show-toast-top 0.2s ease-out forwards;
+		}
+
+		&.show.bottom {
+			animation: show-toast-bottom 0.2s ease-out forwards;
+		}
+
+		&.hide.top {
+			animation: hide-toast-top 0.2s ease-out forwards;
+		}
+
+		&.hide.bottom {
+			animation: hide-toast-bottom 0.2s ease-out forwards;
+		}
+	}
+}
+
+@keyframes show-toast-top {
+	from {
+		opacity: 0;
+		margin-top: -44px;
+	}
+
+	to {
+		opacity: 1;
+		z-index: 1;
+	}
+}
+
+@keyframes show-toast-bottom {
+	from {
+		opacity: 0;
+		margin-bottom: -44px;
+	}
+
+	to {
+		opacity: 1;
+		z-index: 1;
+	}
+}
+
+@keyframes hide-toast-top {
+	from {
+		/* faz com que seja escondido por trás do anterior */
+		z-index: 0;
+	}
+
+	to {
+		opacity: 0;
+		margin-top: -44px;
+	}
+}
+
+@keyframes hide-toast-bottom {
+	from {
+		/* faz com que seja escondido por trás do anterior */
+		z-index: 0;
+	}
+
+	to {
+		opacity: 0;
+		margin-bottom: -44px;
+	}
+}

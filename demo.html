@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
 	<meta charset="UTF-8">
@@ -9,27 +9,47 @@
 </head>
 
 <body>
-	<button onclick="toast()">Toast</button>
+	<h1>Toast</h1>
+	<button onclick="toast1()">Toast 1</button>
+	<button onclick="toast2()">Toast 2</button>
 </body>
 
 <script type="module">
 	import Toast from './Toast.js';
 
-	window.toast = toast;
+	window.toast1 = toast1;
+	window.toast2 = toast2;
 
-	function toast() {
+	function toast1() {
 		Toast({
-			icon: '(i)',
-			message: `<span>${new Date().toUTCString()}</span> <span>Asdfdf asdfasdf asdf</span> <span>Asdfdf asdfasdf asdf</span>`,
+			icon: '<span style="font-size: 1.2em;">H</span>',
+			message: `<span>${new Date().toUTCString()}</span> <span>Asdfdf <b>asdf</b>`,
+			position: 'top right',
+			time: 100000,
+		});
+	}
+
+	function toast2() {
+		Toast({
+			icon: '<span style="font-size: 1.2em;">H</span>',
+			message: `Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe incidunt pariatur distinctio nobis rerum doloremque, fugit possimus assumenda accusantium, eos hic non deserunt reprehenderit porro aliquid libero quae placeat voluptate!`,
 			position: 'top center',
-			time: 4
+			time: 100000,
+			size: 1,
 		});
 	}
 </script>
 
 <style>
-	* {
+	body {
+		margin: 0;
+		padding: 32px;
+		font-family: sans-serif;
 		font-size: 13px;
+	}
+
+	button {
+		padding: 6px 12px;
 	}
 </style>
 
