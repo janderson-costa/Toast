@@ -21,6 +21,8 @@ export default function Toast(options = {}) {
 		if (!$toasts) {
 			$toasts = document.createElement('div');
 			$toasts.className = 'toasts';
+			$toasts.addEventListener('mouseover', () => $toasts.classList.add('scrollable', 'mouseover'));
+			$toasts.addEventListener('mouseout', () => $toasts.classList.remove('scrollable', 'mouseover'));
 			document.body.appendChild($toasts);
 		}
 
@@ -63,25 +65,33 @@ export default function Toast(options = {}) {
 		// Posição vertical
 		if (options.position.match('top')) {
 			$toasts.classList.add('top');
-
+			
 			// Adiciona em cima do anterior
 			$toasts.prepend($toast);
-			$toast.classList.add('show', 'top');
+			$toast.style.marginTop = `-${$toast.offsetHeight}px`;
+			$toast.classList.add('top');
+
+			setTimeout(() => $toast.classList.add('show'), 200); // ! Atraso deve ser igual a velocidade da transição CSS
 		} else {
 			$toasts.classList.add('bottom');
 
 			// Adiciona em baixo do anterior
 			$toasts.appendChild($toast);
-			$toast.classList.add('show', 'bottom');
+			$toast.style.marginBottom = `-${$toast.offsetHeight}px`;
+			$toast.classList.add('bottom');
+
+			setTimeout(() => $toast.classList.add('show'), 200); // ! Atraso deve ser igual a velocidade da transição CSS
 		}
 
 		// Remove ao término do tempo de exibição
-		setTimeout(() => {
-			// Oculta
-			$toast.className = $toast.className.replace('show', 'hide');
+		setInterval(() => {
+			if (!$toasts.classList.contains('mouseover')) {
+				// Oculta
+				$toast.className = $toast.className.replace('show', 'hide');
 
-			// Remove
-			setTimeout(() => $toast.remove(), 500);
+				// Remove
+				setTimeout(() => $toast.remove(), 500);
+			}
 		}, options.time * 1000);
 	}
 }

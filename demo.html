@@ -12,6 +12,9 @@
 	<h1>Toast</h1>
 	<button onclick="toast1()">Toast 1</button>
 	<button onclick="toast2()">Toast 2</button>
+	<br>
+	<br>
+	Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis vitae voluptas alias impedit eum ab accusamus necessitatibus distinctio, non cum voluptate, obcaecati iure fugit quam? Veniam maiores beatae alias illum?
 </body>
 
 <script type="module">
@@ -22,20 +25,19 @@
 
 	function toast1() {
 		Toast({
-			icon: '<span style="font-size: 1.2em;">H</span>',
-			message: `<span>${new Date().toUTCString()}</span> <span>Asdfdf <b>asdf</b>`,
-			position: 'top right',
-			time: 100000,
+			// icon: '<span style="font-size: 1.2em;">H</span>',
+			message: `<span>${new Date().toUTCString()}</span> <span>Asdf <b>qwer</b>`,
+			position: 'top center',
+			time: 5,
 		});
 	}
 
 	function toast2() {
 		Toast({
 			icon: '<span style="font-size: 1.2em;">H</span>',
-			message: `Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe incidunt pariatur distinctio nobis rerum doloremque, fugit possimus assumenda accusantium, eos hic non deserunt reprehenderit porro aliquid libero quae placeat voluptate!`,
-			position: 'top center',
-			time: 100000,
-			size: 1,
+			message: `${new Date().toUTCString()} Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe incidunt pariatur distinctio nobis rerum doloremque, fugit possimus assumenda accusantium, eos hic non deserunt reprehenderit porro aliquid libero quae placeat voluptate!`,
+			position: 'bottom center',
+			time: 5,
 		});
 	}
 </script>
