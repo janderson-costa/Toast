@@ -2,10 +2,11 @@
 <html lang="pt-br">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Toast - Demo</title>
-	<link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- <link rel="stylesheet" href="style.css"> -->
 </head>
 
 <body>
@@ -26,9 +27,9 @@
 	function toast1() {
 		Toast({
 			// icon: '<span style="font-size: 1.2em;">H</span>',
-			message: `<span>${new Date().toUTCString()}</span> <span>Asdf <b>qwer</b>`,
+			message: `<span>${new Date().toUTCString()}</span> <span>Asdf <b>qwer</b>`,//.toUpperCase(),
 			position: 'top center',
-			time: 5,
+			time: 5000,
 		});
 	}
 
@@ -37,7 +38,7 @@
 			icon: '<span style="font-size: 1.2em;">H</span>',
 			message: `${new Date().toUTCString()} Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe incidunt pariatur distinctio nobis rerum doloremque, fugit possimus assumenda accusantium, eos hic non deserunt reprehenderit porro aliquid libero quae placeat voluptate!`,
 			position: 'bottom center',
-			time: 5,
+			time: 5000,
 		});
 	}
 </script>

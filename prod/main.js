@@ -19,7 +19,7 @@ const defaultOptions = {
 	link.id = 'toast';
 	link.rel = 'stylesheet';
 	link.type = 'text/css';
-	link.href = 'style.css?v=' + new Date().getTime();
+	link.href = '/sites/appcatalog/dev/common/lib/toast/prod/style.css?v=' + new Date().getTime();
 
 	document.querySelector('head').appendChild(link);
 })();
@@ -28,10 +28,6 @@ export default function Toast(options = {}) {
 	options = { ...defaultOptions, ...options };
 
 	create();
-
-	return {
-		//..
-	};
 
 	function create() {
 		// Container
