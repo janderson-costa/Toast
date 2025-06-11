@@ -6,12 +6,13 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- <link rel="stylesheet" href="style.css"> -->
+	<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 	<h1>Toast</h1>
 	<button onclick="toast1()">Toast 1</button>
+	<button onclick="hideToast1()">Hide Toast 1</button>
 	<button onclick="toast2()">Toast 2</button>
 	<br>
 	<br>
@@ -23,13 +24,19 @@
 
 	window.toast1 = toast1;
 	window.toast2 = toast2;
+	window.hideToast1 = hideToast1;
+
+	let toast;
 
 	function toast1() {
-		Toast({
-			// icon: '<span style="font-size: 1.2em;">H</span>',
-			message: `<span>${new Date().toUTCString()}</span> <span>Asdf <b>qwer</b>`,//.toUpperCase(),
+		toast = Toast({
+			icon: '<span style="font-size: 1.2em; color: cyan;">H</span>',
+			message: `<span>${new Date().toUTCString()}</span> <span>Asdf <b style="color: yellow;">QWER</b>`,//.toUpperCase(),
 			position: 'top center',
+			//gap: 12,
+			//inset: 12,
 			time: 5000,
+			hideButton: true,
 		});
 	}
 
@@ -38,8 +45,14 @@
 			icon: '<span style="font-size: 1.2em;">H</span>',
 			message: `${new Date().toUTCString()} Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe incidunt pariatur distinctio nobis rerum doloremque, fugit possimus assumenda accusantium, eos hic non deserunt reprehenderit porro aliquid libero quae placeat voluptate!`,
 			position: 'bottom center',
+			//gap: 12,
+			//inset: 12,
 			time: 5000,
 		});
+	}
+
+	function hideToast1() {
+		toast.hide();
 	}
 </script>
 
