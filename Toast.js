@@ -102,7 +102,7 @@ export default function Toast(options = {}) {
 		// Botão ocultar
 		if (options.buttonClose) {
 			$button.classList.remove('hidden');
-			$button.addEventListener('click', async () => {
+			$button.querySelector('button').addEventListener('click', async () => {
 				if (options.onBeforeClose) {
 					let closed = await options.onBeforeClose();
 
