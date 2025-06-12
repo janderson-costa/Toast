@@ -9,7 +9,11 @@ const defaultOptions = {
 	gap: 12, // number (pixels)
 	inset: 12, // number (pixels)
 	time: 5, // number (seconds)
-	hideButton: true, // Exibe o botão X
+	spin: false, // boolean (Exibe o spin girando)
+	buttonClose: false, // boolean (Exibe o botão X)
+	onHide: null, // function
+	onClose: null, // function
+	onBeforeClose: null, // function
 };
 
 // (() => {
@@ -43,11 +47,14 @@ export default function Toast(options = {}) {
 	options = { ...defaultOptions, ...options };
 
 	let $toastWrapper;
+	let _interval;
 
 	$toasts.style.inset = `${options.inset}px`;
 	create();
 
 	return {
+		message,
+		show,
 		hide,
 	};
 
@@ -62,28 +69,28 @@ export default function Toast(options = {}) {
 						${options.message}
 					</div>
 				</div>
-				<div class="toast-button hidden">
-					<button type="button" class="toast-button-icon">✖</button>
+				<div class="toast-controls">
+					<div class="toast-button hidden">
+						<button type="button" class="toast-button-icon" title="Fechar">✖</button>
+					</div>
+					<div class="toast-spin hidden"></div>
 				</div>
 			</div>
 		`;
 
+		// Toast
 		const $toast = $toastWrapper.querySelector('.toast');
+		const $icon = $toast.querySelector('.toast-icon');
+		const $controls = $toast.querySelector('.toast-controls');
+		const $button = $toast.querySelector('.toast-button');
+		const $spin = $toast.querySelector('.toast-spin');
 
+		$toast.addEventListener('mouseover', () => $toast.classList.add('mouseover'));
+		$toast.addEventListener('mouseout', () => $toast.classList.remove('mouseover'));
 		$toastWrapper.prepend($toast);
-
-		// Botão ocultar
-		if (options.hideButton) {
-			const $button = $toast.querySelector('.toast-button');
-
-			$button.classList.remove('hidden');
-			$button.addEventListener('click', hide);
-		}
 
 		// Ícone
 		if (options.icon) {
-			const $icon = $toast.querySelector('.toast-icon');
-
 			if (options.icon instanceof HTMLElement)
 				$icon.appendChild(options.icon);
 			else
@@ -92,6 +99,48 @@ export default function Toast(options = {}) {
 			$toast.prepend($icon);
 		}
 
+		// Botão ocultar
+		if (options.buttonClose) {
+			$button.classList.remove('hidden');
+			$button.addEventListener('click', async () => {
+				if (options.onBeforeClose) {
+					let closed = await options.onBeforeClose();
+
+					if (closed)
+						hide();
+				} else {
+					hide();
+				}
+			});
+		}
+
+		// Spin
+		if (options.spin) {
+			$spin.classList.remove('hidden');
+			$button.classList.add('hidden');
+		}
+
+		// Alterna entre botão e spin
+		$controls.addEventListener('mouseover', () => {
+			if (options.buttonClose && options.spin) {
+				$spin.classList.add('hidden');
+				$button.classList.remove('hidden');
+			}
+		});
+
+		$controls.addEventListener('mouseout', () => {
+			if (options.buttonClose && options.spin) {
+				$spin.classList.remove('hidden');
+				$button.classList.add('hidden');
+			}
+		});
+	}
+
+	function message(text) {
+		$toastWrapper.querySelector('.toast-content').innerHTML = text || '';
+	}
+
+	function show() {
 		// Posição horizontal
 		const positionX = 'center';
 
@@ -107,7 +156,7 @@ export default function Toast(options = {}) {
 		if (options.position.match('top')) {
 			$toasts.querySelectorAll('.toast-wrapper.bottom').forEach(x => x.remove());
 			$toastWrapper.classList.add('top');
-			$toastWrapper.style.transform = 'scale(0.8) translateY(-12px)';
+			$toastWrapper.style.transform = 'scale(0.8) translateY(-16px)';
 
 			// Adiciona em cima do anterior
 			$toasts.prepend($toastWrapper);
@@ -135,7 +184,7 @@ export default function Toast(options = {}) {
 		if (options.position.match('bottom')) {
 			$toasts.querySelectorAll('.toast-wrapper.top').forEach(x => x.remove());
 			$toastWrapper.classList.add('bottom');
-			$toastWrapper.style.transform = 'scale(0.8) translateY(12px)';
+			$toastWrapper.style.transform = 'scale(0.8) translateY(16px)';
 
 			// Adiciona em baixo do anterior
 			$toasts.appendChild($toastWrapper);
@@ -160,60 +209,56 @@ export default function Toast(options = {}) {
 			});
 		}
 
-		// // Remove ao término do tempo de exibição
-		// setInterval(() => {
-		// 	if (!$toasts.classList.contains('mouseover')) {
-		// 		// Oculta
-		// 		$toast.className = $toast.className.replace('show', 'hide');
-
-		// 		// Remove
-		// 		setTimeout(() => $toast.remove(), 300);
-		// 	}
-		// }, options.time * 1000);
+		// Oculta/Remove ao término do tempo de exibição
+		_interval = setInterval(() => {
+			if (
+				!options.buttonClose &&
+				!options.spin &&
+				!$toasts.querySelectorAll('.toast.mouseover').length
+			) {
+				hide();
+			}
+		}, options.time * 1000);
 	}
 
 	function hide() {
-		$toastWrapper.style.transform = `scale(0.8) translateY(${$toastWrapper.style.transform})`;
+		// Oculta
+		$toastWrapper.style.transform = `translateY(${$toastWrapper.style.transform})`;
 		$toastWrapper.style.opacity = 0;
 
-		const $items = Array.from($toasts.querySelectorAll('.toast-wrapper'));
-		let translateY;
-		let move = false;
+		// Move os outros para cima ou baixo
+		const isTop = options.position.match('top');
+		let $items = Array.from($toasts.querySelectorAll('.toast-wrapper'));
+		let height;
 
-		// $items.forEach(($tw, index) => {
-		// 	if (options.position.match('top')) {
-		// 		if ($tw == $toastWrapper) {
-		// 			move = true;
-		// 		} else if (move) {
-		// 			translateY = translateY == undefined ? $toastWrapper.style.transform : $tw.nextSibling.style.transform;
-		// 			translateY = Number(translateY.replace(/\D/g, ''));
+		$items = isTop ? $items : $items.reverse();
 
-		// 			$tw.style.transform = `translateY(${translateY}px)`;
-		// 		}
-		// 	}
-		// });
-
-		for (let i = $items.length - 1; i >= 0; i--) {
-			const $tw = $items[i];
-
+		for (const $tw of $items) {
 			if ($tw == $toastWrapper) {
-				move = true;
+				height = $toastWrapper.offsetHeight;
 				continue;
 			}
 
-			if (move) {
-				const $prev = $items[i + 1];
+			if (height) {
+				let translateY = Number($tw.style.transform.replace(/\D/g, ''));
 
-				console.log($prev);
+				translateY = isTop ?
+					`${translateY - height - options.gap}px` :
+					`calc(-1 * ${translateY - height - options.gap}px)`;
 
-				if ($prev) {
-					const translateY = Number($prev.style.transform.replace(/\D/g, ''));
-
-					console.log($prev.style.transform);
-	
-					$tw.style.transform = `translateY(${translateY}px)`;
-				}
+				$tw.style.transform = `translateY(${translateY})`;
 			}
 		}
+
+		// Remove
+		setTimeout(() => $toastWrapper.remove(), 300);
+
+		if (options.onHide)
+			options.onHide();
+
+		if (options.onClose)
+			options.onClose();
+
+		clearInterval(_interval);
 	}
 }
