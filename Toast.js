@@ -77,7 +77,12 @@ export default function Toast(options = {}) {
 							</svg>
 						</button>
 					</div>
-					<div class="toast-spin hidden"></div>
+					<div class="toast-spin hidden">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+							<circle fill="none" stroke="white" stroke-width="12" opacity="0.3" cx="50" cy="50" r="40"></circle>
+							<circle fill="none" stroke="white" stroke-width="12" opacity="0.9" stroke-dasharray="278" stroke-dashoffset="210" cx="50" cy="50" r="40"></circle>
+						</svg>
+					</div>
 				</div>
 			</div>
 		`;
